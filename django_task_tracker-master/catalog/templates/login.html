@@ -1,0 +1,13 @@
+{% extends 'catalog/tasks_list.html' %}
+{% block content %}
+    <div class="container mt-4">
+<h1 class="mt-4">Авторизация</h1>
+    <div class="col-4">
+     <form id="add_form" method="post">
+        {% csrf_token %}
+        {{form}}
+        <button form="add_form" type="submit" class="btn btn-info mt-4">Войти</button>
+    </form>
+    </div>
+    </div>
+{% endblock %}

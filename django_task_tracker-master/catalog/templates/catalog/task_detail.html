@@ -1,0 +1,69 @@
+{% extends "catalog/tasks_list.html" %}
+     <script>
+  $(function() {
+    $( ".datepicker" ).datepicker({
+      changeMonth: true,
+      changeYear: true,
+      yearRange: "1900:2012",
+      // You can put more options here.
+
+    });
+  });
+  </script>
+  <title>Tasks</title>
+{% block content %}
+    {% if request.user.is_authenticated %}
+    <div class="container mt-4">
+        <a href=javascript:history.back(); return false;>Вернуться назад</a>
+
+  <h1>Задача:</h1>
+    <br>
+  <p><strong>Цель:</strong>{{ task.purpose }}</p>
+  <p><strong>Проект:</strong>{{ task.project }}</p>
+  <p><strong>Статус:</strong> {{ task.status }}</p>
+  <p><strong>Автор:</strong> {{ task.author }}</p>
+  <p><strong>Исполнитель:</strong> {{ task.worker}}</p>
+  <p><strong>Добавлено:</strong> {{ task.added_at}}</p>
+        <p><strong>Дедлайн:</strong> {{ task.deadline}}</p>
+
+
+{#  <p><strong>Comment statistics:</strong>{% for day, val in statistics.items %} <li> On {{ day }} was added {{val.diff_descriptions}} comments by {{val.diff_authors}} authors. </li> {% endfor %} </p>#}
+{#  <p><strong>Comments:</strong>{% for descr in all_descriptions.values %} <li> {{ descr.description }} </li> {% endfor %} </p>#}
+  <p><strong>Комментарии:</strong>
+  <ul>
+{% for item in all_descriptions.values %}
+    <li>
+        {{ item.description }}
+        <br>
+    <li style="list-style: square">Дата создания: {{item.added_at}}</li>
+    {% for day, val in statistics.items %}
+        Автор: {{val.diff_authors}}<br>
+        </li>
+        {% endfor %}
+    {% endfor %}
+    </ul>
+{#      {% for descr in all_descriptions.values %} <li> {{ descr.description }} {% for day, val in statistics.items %} on {{ day }} was added by {{val.diff_authors}}. </li> {% endfor %} {% endfor %} </p>#}
+        {% if request.user == task.author %}
+        <form action="{% url 'create_description' task.id %}" method="get">
+    <input type="submit"  class="btn btn-info mt-2" value="Добавить комментарий">
+  </form>
+  <form action="{% url 'update_task' task.id %}" method="get">
+    {% csrf_token %}
+    <input type="submit" class="btn btn-info mt-2" value="Обновить задачу">
+  </form>
+            <form action="{% url 'delete_task' task.id %}" method="post">
+    {% csrf_token %}
+    <input type="submit" class="btn btn-info mt-2" value="Удалить задачу">
+  <br><br>
+  </form>
+            {% else %}
+             <form action="{% url 'create_description' task.id %}" method="get">
+    <input type="submit"  class="btn btn-info mt-2" value="Добавить комментарий">
+  </form>
+            <br>
+
+    {% endif %}
+    </div>
+    {% endif %}
+{% endblock %}
+

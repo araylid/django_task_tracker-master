@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+{#      <link rel="stylesheet" type="text/css" href="./css/tasks_list.css">#}
+    <title>Tasks</title>
+   <style>
+   li {
+    list-style-type: none; /* Убираем маркеры */
+   }
+   ul {
+    margin-left: 0; /* Отступ слева в браузере IE и Opera */
+    padding-left: 0; /* Отступ слева в браузере Firefox, Safari, Chrome */
+   }
+  </style>
+
+  {% block head %}
+  <div class="p-2 mb-2 bg-dark text-white">
+    <ul class="d-flex">
+    {% if request.user.is_authenticated %}
+        <li class="p-2">
+             {% url 'root' as url_root %}
+            <a class="nav-link btn-info ml-5 {% if url_root == request.path %}active{% endif %}" href="{{url_root}}">Главная страница</a>
+        </li>
+        <li class="p-2">
+        {% url 'create_task' as url_create_task %}
+        <a class="nav-link btn-info ml-5 {% if url_create_task == request.path %}active{% endif %}" href="{{url_create_task}}">Создать задачу</a>
+        </li>
+        <li class="ml-auto p-2 align-self-center">Пользователь: {{request.user}}</li>
+        <li class="mt-auto p-2">
+             {% url 'logout_page' as url_logout_page %}
+            <a class="nav-link btn-info ml-5" href="{{url_logout_page}}">Выйти</a>
+        </li>
+        {% else %}
+        <li class="p-2">
+            {% url 'login_page' as url_login_page %}
+            <a class="nav-link btn-info ml-5 {% if url_login_page == request.path %}active{% endif %}" href="{{url_login_page}}">Авторизация</a>
+        </li>
+        <li class="p-2">
+            {% url 'register_page' as url_register_page %}
+            <a class="nav-link btn-info ml-5 {% if url_register_page == request.path %}active{% endif %}" href="{{url_register_page}}">Регистрация</a>
+        </li>
+    {% endif %}
+        </ul>
+        </div>
+  {% endblock %}
+        </head>
+
+
+        <body>
+        {% block content %}
+        <div class="container mt-4">
+            <table width="100%">
+            <tr><td align="left"><h2>Поиск:</h2>
+    <form action="" method="get">
+    {% csrf_token %}
+    <table>
+    {{ form }}
+    </table>
+    <input type="submit" class="btn btn-info mt-2" value="Filter"/>
+    </form>
+            <br>
+
+
+            <h2>Созданные задачи:</h2>
+    {% if tasks_list %}
+    <ul>
+      {% for task in tasks_list %}
+      <li>
+        <a href="{{ task.get_absolute_url }}">{{ task.purpose }}</a>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+      <p>There aren't tasks with such filter options.</p>
+    {% endif %}
+{#        <input type="button" value="Create task" class="btn btn-info" onClick="location.href={% url 'create_task' %}">#}
+
+        <h2>Назначенные задачи:</h2>
+    {% if tasks_list1 %}
+    <ul>
+      {% for task in tasks_list1 %}
+      <li>
+        <a href="{{ task.get_absolute_url }}">{{ task.purpose }}</a>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+      <p>There aren't tasks with such filter options.</p>
+    {% endif %}</td>
+
+
+<td width="15%"></td>
+            <td align="left" valign="top"><h2>Задачи в процессе:</h2>
+            {% if tasks_list2 %}
+            <table class="table table-bordered mt-4">
+                <thead>
+                <tr>
+                    <th scope="col">Дедлайн</th>
+                    <th scope="col">Цель</th>
+                    <th scope="col">Проект</th>
+                    <th scope="col">Действие</th>
+                </tr>
+                </thead>
+            <tbody>
+      {% for task in tasks_list2 %}
+          <tr>
+          {% if task.is_past_due %}
+              <td><font color="red"><b>{{ task.deadline }}</b></font></td>
+              {% else %}
+              <td><b>{{ task.deadline }}</b></td>
+
+{% endif %}
+
+          <td><span class="m-2">{{ task.purpose }}</span></td>
+          <td><span>{{ task.project }}</span></td>
+          <td><span><a href="{{ task.get_absolute_url }}">перейти к задаче</a> </span></td>
+          </tr>
+      {% endfor %}
+    {% else %}
+      <p>There aren't tasks with such filter options.</p>
+    {% endif %}
+            </tbody>
+            </table>
+            </td></tr></table>
+
+        {% endblock %}
+        </div>
+
+
+
+
+

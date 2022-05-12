@@ -1,0 +1,26 @@
+{% extends 'catalog/tasks_list.html' %}
+{% block content %}
+    <h1>Filter by or search:</h1>
+    <form action="" method="get">
+    {% csrf_token %}
+    <table>
+    {{ form }}
+    </table>
+    <br>
+    <input type="submit" value="Filter"/>
+    </form>
+
+    <h1>Tasks list:</h1>
+    {% if tasks_list %}
+    <ul>
+      {% for task in tasks_list %}
+      <li>
+        <a href="{{ task.get_absolute_url }}">{{ task.purpose }}</a> ({{task.author}})
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+      <p>There aren't tasks with such filter options.</p>
+    {% endif %}
+    <input type="button" value="Create task" onClick="location.href={% url 'create_task' %}">
+{% endblock %}

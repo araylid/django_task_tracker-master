@@ -1,0 +1,18 @@
+{% extends "catalog/tasks_list.html" %}
+  <title>Update task</title>
+{% block content %}
+<div class="container mt-4">
+<a href=javascript:history.back(); return false;>Вернуться назад</a>
+
+<h2>Выберите новый статус, исполнителя или дедлайн:</h2>
+    <br>
+<form action="" method="post">
+    {% csrf_token %}
+    <table>
+    {{ form }}
+    </table>
+    <br>
+    <input type="submit" class="btn btn-info mt-2" value="Обновить"/>
+</form>
+</div>
+{% endblock %}

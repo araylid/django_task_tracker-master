@@ -1,0 +1,17 @@
+{% extends "catalog/tasks_list.html" %}
+{% block content %}
+  <title>Create task</title>
+<div class="container mt-4">
+<a href=javascript:history.back(); return false;>Вернуться назад</a>
+<h2>Заполните форму, чтобы создать задачу:</h2>
+<form action="" method="post">
+    {% csrf_token %}
+    <table>
+     {{ form }}
+    </table>
+    <br>
+    <input type="submit" class="btn btn-info mt-2" value="Создать"/>
+    <br><br>
+</form>
+</div>
+{% endblock %}

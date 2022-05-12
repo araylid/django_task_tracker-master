@@ -1,0 +1,17 @@
+{% extends "catalog/tasks_list.html" %}
+{% block content %}
+<title>Create description</title>
+<div class="container mt-4">
+<a href=javascript:history.back(); return false;>Вернуться назад</a>
+<h2>Заполните форму, чтобы добавить коммментарий:</h2>
+    <br>
+<form action="" method="post">
+    {% csrf_token %}
+    <table>
+    {{ form }}
+    </table>
+    <br>
+    <input type="submit" class="btn btn-info mt-2" value="Добавить"/>
+</form>
+</div>
+{% endblock %}
